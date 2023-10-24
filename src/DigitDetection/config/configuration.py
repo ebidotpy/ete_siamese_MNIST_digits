@@ -3,7 +3,8 @@ import os
 import sys
 from pathlib import Path
 from DigitDetection.utils.common import read_yaml, create_directories
-from DigitDetection.entity.config_entity import DataIngestionConfig
+from DigitDetection.entity.config_entity import (DataIngestionConfig, 
+                                                 DataPrepareConfig)
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
@@ -34,5 +35,24 @@ class ConfigurationManager:
             )
             return data_ingestion_config
             logging.info("data_ingestion_config returned")
+        except Exception as e:
+            raise AppException(e, sys)
+
+    def get_data_prepare_config(self) -> DataPrepareConfig:
+        try:
+            config = self.config.data_prepare
+            params = self.params
+
+            data_prepare_config = DataPrepareConfig(
+                train_images=config.train_images, 
+                train_labels=config.train_labels, 
+                test_images=config.test_images, 
+                test_labels=config.test_labels, 
+                batch_size=params.BATCH_SIZE, 
+                image_shape=params.IMAGE_SHAPE
+            )
+
+            return data_prepare_config
+        
         except Exception as e:
             raise AppException(e, sys)
