@@ -13,3 +13,9 @@ class DataPrepareConfig:
     test_labels: Path
     batch_size: int
     image_shape: list
+
+@dataclass(frozen=True)
+class BaseModelConfig:
+    root_dir: Path
+    base_model_path: Path
+    image_shape: list

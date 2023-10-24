@@ -4,7 +4,8 @@ import sys
 from pathlib import Path
 from DigitDetection.utils.common import read_yaml, create_directories
 from DigitDetection.entity.config_entity import (DataIngestionConfig, 
-                                                 DataPrepareConfig)
+                                                 DataPrepareConfig, 
+                                                 BaseModelConfig)
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
@@ -54,5 +55,22 @@ class ConfigurationManager:
 
             return data_prepare_config
         
+        except Exception as e:
+            raise AppException(e, sys)
+    
+    def get_base_model_config(self) -> BaseModelConfig:
+        try:
+            config = self.config.base_model
+            params = self.params
+
+            create_directories([config.root_dir])
+
+            base_model_config = BaseModelConfig(
+                root_dir=config.root_dir, 
+                base_model_path=config.base_model_path, 
+                image_shape=params.IMAGE_SHAPE
+            )
+
+            return base_model_config
         except Exception as e:
             raise AppException(e, sys)
