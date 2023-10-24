@@ -1,0 +1,142 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python3 src/DigitDetection/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 2e0f096a6246a8a282bba1b3dfcf889b
+      size: 682
+    - path: src/DigitDetection/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 7ef8380f697d5fd57bda5ec2dc111a83
+      size: 1131
+    outs:
+    - path: artifacts/data_ingestion/t10k-images-idx3-ubyte
+      hash: md5
+      md5: 240610fa99e73bfa49df8e7fc24d3206
+      size: 7840000
+    - path: artifacts/data_ingestion/t10k-labels-idx1-ubyte
+      hash: md5
+      md5: 073c3904dfbd3e141ff8aa01cfde6b15
+      size: 10000
+    - path: artifacts/data_ingestion/train-images-idx3-ubyte
+      hash: md5
+      md5: 6510e85a72c3e9475c492d559d3770d2
+      size: 47040000
+    - path: artifacts/data_ingestion/train-labels-idx1-ubyte
+      hash: md5
+      md5: e86ee40d66677c011a9abda399ec8c4d
+      size: 60000
+  data_prepare:
+    cmd: python3 src/DigitDetection/pipeline/stage_02_data_prepare.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 2e0f096a6246a8a282bba1b3dfcf889b
+      size: 682
+    - path: src/DigitDetection/pipeline/stage_02_data_prepare.py
+      hash: md5
+      md5: d96cc0547bb631e42c94d0d5c7e41d08
+      size: 993
+    params:
+      params.yaml:
+        BATCH_SIZE: 16
+        IMAGE_SHAPE:
+        - 28
+        - 28
+        - 1
+  prepare_base_model:
+    cmd: python3 src/DigitDetection/pipeline/stage_03_prepare_base_model.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 2e0f096a6246a8a282bba1b3dfcf889b
+      size: 682
+    - path: src/DigitDetection/pipeline/stage_03_prepare_base_model.py
+      hash: md5
+      md5: b7ead9503534ae387cd2522e78bc306c
+      size: 1036
+    params:
+      params.yaml:
+        IMAGE_SHAPE:
+        - 28
+        - 28
+        - 1
+    outs:
+    - path: artifacts/base_model/model.h5
+      hash: md5
+      md5: a35c240007dca1983e1e91cc7f7d36b3
+      size: 104304
+  training:
+    cmd: python3 src/DigitDetection/pipeline/stage_04_training.py
+    deps:
+    - path: artifacts/base_model/model.h5
+      hash: md5
+      md5: a35c240007dca1983e1e91cc7f7d36b3
+      size: 104304
+    - path: artifacts/data_ingestion/t10k-images-idx3-ubyte
+      hash: md5
+      md5: 240610fa99e73bfa49df8e7fc24d3206
+      size: 7840000
+    - path: artifacts/data_ingestion/t10k-labels-idx1-ubyte
+      hash: md5
+      md5: 073c3904dfbd3e141ff8aa01cfde6b15
+      size: 10000
+    - path: artifacts/data_ingestion/train-images-idx3-ubyte
+      hash: md5
+      md5: 6510e85a72c3e9475c492d559d3770d2
+      size: 47040000
+    - path: artifacts/data_ingestion/train-labels-idx1-ubyte
+      hash: md5
+      md5: e86ee40d66677c011a9abda399ec8c4d
+      size: 60000
+    - path: config/config.yaml
+      hash: md5
+      md5: 2e0f096a6246a8a282bba1b3dfcf889b
+      size: 682
+    - path: src/DigitDetection/pipeline/stage_04_training.py
+      hash: md5
+      md5: 9f3e49ad6b7dcdd019b194abaea76188
+      size: 1036
+    params:
+      params.yaml:
+        BATCH_SIZE: 16
+        EPOCHS: 1
+        IMAGE_SHAPE:
+        - 28
+        - 28
+        - 1
+    outs:
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: 95b14dc7bdc5d0e817345d8a9a3cf305
+      size: 279008
+  evaluation:
+    cmd: python3 src/DigitDetection/pipeline/stage_05_evaluation.py
+    deps:
+    - path: artifacts/data_ingestion/t10k-images-idx3-ubyte
+      hash: md5
+      md5: 240610fa99e73bfa49df8e7fc24d3206
+      size: 7840000
+    - path: artifacts/data_ingestion/t10k-labels-idx1-ubyte
+      hash: md5
+      md5: 073c3904dfbd3e141ff8aa01cfde6b15
+      size: 10000
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: 95b14dc7bdc5d0e817345d8a9a3cf305
+      size: 279008
+    - path: config/config.yaml
+      hash: md5
+      md5: 2e0f096a6246a8a282bba1b3dfcf889b
+      size: 682
+    - path: src/DigitDetection/pipeline/stage_05_evaluation.py
+      hash: md5
+      md5: 00a56ede334493e30b17a73f24fdc77e
+      size: 1163
+    outs:
+    - path: artifacts/output/scores.json
+      hash: md5
+      md5: 1c269ca61f14a781377a85752a13323d
+      size: 55

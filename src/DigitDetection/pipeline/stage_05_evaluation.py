@@ -5,7 +5,7 @@ from DigitDetection.components.data_prepare import DataPrepare
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
-STAGE_NAME = "Evaluation Config"
+STAGE_NAME = "Evaluation Pipeline"
 class EvaluationTrainingPipeline:
     def __init__(self):
         pass

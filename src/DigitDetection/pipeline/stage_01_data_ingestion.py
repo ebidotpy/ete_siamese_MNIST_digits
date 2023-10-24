@@ -4,7 +4,7 @@ from DigitDetection.components.data_ingestion import DataIngestion
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
-STAGE_NAME = "Data Ingestion"
+STAGE_NAME = "Data Ingestion Pipeline"
 
 class DataIngestionTrainingPipeline:
     def __init__(self):

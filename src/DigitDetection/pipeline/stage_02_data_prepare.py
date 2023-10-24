@@ -5,7 +5,7 @@ from DigitDetection.config.configuration import ConfigurationManager
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
-SATGE_NAME = "Data Prepare"
+SATGE_NAME = "Data Prepare Pipeline"
 
 class DataPrepareTrainPipeline:
     def __init__(self):

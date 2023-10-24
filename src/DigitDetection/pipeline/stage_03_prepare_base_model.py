@@ -5,7 +5,7 @@ from DigitDetection.config.configuration import ConfigurationManager
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
-STAGE_NAME = "Prepare Base Model"
+STAGE_NAME = "Prepare Base Model Pipeline"
 
 class BaseModelTrainingPipeline:
     def __init__(self):

@@ -39,6 +39,6 @@ class Evaluation:
     def save_score(self):
         try:
             scores = {"loss": self.score[0], "accuracy": self.score[1]}
-            save_json(path=os.path.join(self.eval_config.root_dir+"scores.json"), data=scores)
+            save_json(path=Path(os.path.join(self.eval_config.root_dir+"/"+"scores.json")), data=scores)
         except Exception as e:
             raise AppException(e, sys)

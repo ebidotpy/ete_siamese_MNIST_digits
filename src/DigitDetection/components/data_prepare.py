@@ -80,13 +80,14 @@ class DataPrepare:
             train_labels_file = self.config.train_labels
             test_images_file = self.config.test_images
             test_labels_file = self.config.test_labels
-            train_images, train_labels = self.parse_mnist(train_images_file, train_labels_file)
-            test_images, test_labels = self.parse_mnist(test_images_file, test_labels_file)
+            if os.path.exists(train_images_file):
+                train_images, train_labels = self.parse_mnist(train_images_file, train_labels_file)
+                test_images, test_labels = self.parse_mnist(test_images_file, test_labels_file)
 
-            train = self.make_pairs(train_images, train_labels)
-            test = self.make_pairs(test_images, test_labels)
-            
-            return train, test
+                train = self.make_pairs(train_images, train_labels)
+                test = self.make_pairs(test_images, test_labels)
+                
+                return train, test
 
         except Exception as e:
             raise AppException(e, sys)

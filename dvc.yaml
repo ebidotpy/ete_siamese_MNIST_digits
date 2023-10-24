@@ -1,0 +1,54 @@
+stages:
+  data_ingestion: 
+    cmd: python3 src/DigitDetection/pipeline/stage_01_data_ingestion.py
+    deps: 
+      - src/DigitDetection/pipeline/stage_01_data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/train-images-idx3-ubyte
+      - artifacts/data_ingestion/train-labels-idx1-ubyte
+      - artifacts/data_ingestion/t10k-images-idx3-ubyte
+      - artifacts/data_ingestion/t10k-labels-idx1-ubyte
+  data_prepare:
+    cmd: python3 src/DigitDetection/pipeline/stage_02_data_prepare.py
+    deps:
+      - src/DigitDetection/pipeline/stage_02_data_prepare.py
+      - config/config.yaml
+    params:
+      - BATCH_SIZE
+      - IMAGE_SHAPE
+  prepare_base_model:
+    cmd: python3 src/DigitDetection/pipeline/stage_03_prepare_base_model.py
+    deps:
+      - src/DigitDetection/pipeline/stage_03_prepare_base_model.py
+      - config/config.yaml
+    params:
+      - IMAGE_SHAPE
+    outs:
+      - artifacts/base_model/model.h5
+  training:
+    cmd: python3 src/DigitDetection/pipeline/stage_04_training.py
+    deps:
+      - src/DigitDetection/pipeline/stage_04_training.py
+      - config/config.yaml
+      - artifacts/data_ingestion/train-images-idx3-ubyte
+      - artifacts/data_ingestion/train-labels-idx1-ubyte
+      - artifacts/data_ingestion/t10k-images-idx3-ubyte
+      - artifacts/data_ingestion/t10k-labels-idx1-ubyte
+      - artifacts/base_model/model.h5
+    params:
+      - EPOCHS
+      - BATCH_SIZE
+      - IMAGE_SHAPE
+    outs:
+      - artifacts/training/model.h5
+  evaluation:
+    cmd: python3 src/DigitDetection/pipeline/stage_05_evaluation.py
+    deps:
+      - src/DigitDetection/pipeline/stage_05_evaluation.py
+      - config/config.yaml
+      - artifacts/training/model.h5
+      - artifacts/data_ingestion/t10k-images-idx3-ubyte
+      - artifacts/data_ingestion/t10k-labels-idx1-ubyte
+    outs:
+      - artifacts/output/scores.json
