@@ -28,3 +28,8 @@ class TrainingConfig:
     epochs: int
     image_shape: list
     batch_size: int
+
+@dataclass(frozen=True)
+class EvaluationConfig:
+    root_dir: Path
+    trained_model_path: Path

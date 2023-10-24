@@ -6,7 +6,8 @@ from DigitDetection.utils.common import read_yaml, create_directories
 from DigitDetection.entity.config_entity import (DataIngestionConfig, 
                                                  DataPrepareConfig, 
                                                  BaseModelConfig, 
-                                                 TrainingConfig)
+                                                 TrainingConfig, 
+                                                 EvaluationConfig)
 from DigitDetection.logger import logging
 from DigitDetection.exception import AppException
 
@@ -92,5 +93,19 @@ class ConfigurationManager:
             )
 
             return training_config
+        except Exception as e:
+            raise AppException(e, sys)
+    def get_evaluation_config(self) -> EvaluationConfig:
+        try:
+            config = self.config.evaluation
+
+            create_directories([config.root_dir])
+
+            evaluation_config = EvaluationConfig(
+                root_dir=config.root_dir, 
+                trained_model_path=config.trained_model_path
+            )
+
+            return evaluation_config
         except Exception as e:
             raise AppException(e, sys)
