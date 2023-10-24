@@ -16,7 +16,7 @@ class BaseModelTrainingPipeline:
             config = ConfigurationManager()
             base_model_config = config.get_base_model_config()
             base_model = BaseModel(base_model_config)
-            base_model.bild_siamese_model()
+            base_model.conjoin_sisters()
 
         except Exception as e:
             raise AppException(e, sys)
